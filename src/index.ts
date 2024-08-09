@@ -1,7 +1,7 @@
 import "express-async-errors";
 import express from "express";
 import errorHandler from "./middlewares/errorHandler";
-import { authRouter } from "./routes/index";
+import { authRouter, friendRouter } from "./routes/index";
 import { connectDB } from "./db/connectDB";
 
 const app = express();
@@ -10,6 +10,7 @@ app.use(express.json());
 
 // Routes
 app.use("/auth", authRouter);
+app.use("/friend", friendRouter);
 app.use(errorHandler);
 
 const start = async () => {
