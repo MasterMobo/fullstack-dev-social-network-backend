@@ -1,4 +1,3 @@
-import "express-async-errors";
 import express from "express";
 import errorHandler from "./middlewares/errorHandler";
 import { authRouter, friendRouter } from "./routes/index";
