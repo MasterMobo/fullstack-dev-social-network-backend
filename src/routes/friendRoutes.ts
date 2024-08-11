@@ -8,10 +8,10 @@ friendRouter.get("/", getFriends);
 
 friendRouter.get("/request", getFriendships);
 
-friendRouter.post("/friends/rquest", authMiddleware, asyncWrapper(createFriendRequest))
+friendRouter.post("/request", authMiddleware, asyncWrapper(createFriendRequest))
 
-friendRouter.patch("/friends/request", authMiddleware, asyncWrapper(acceptFriendRequest))
+friendRouter.patch("/request", authMiddleware, asyncWrapper(acceptFriendRequest))
 
-friendRouter.delete("/friends/request", authMiddleware, asyncWrapper(deleteFriendship))
+friendRouter.delete("/request", authMiddleware, asyncWrapper(deleteFriendship))
 
 export default friendRouter;
