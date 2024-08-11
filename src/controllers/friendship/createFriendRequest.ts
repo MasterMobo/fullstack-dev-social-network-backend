@@ -23,3 +23,5 @@ const createFriendRequest = async (req: Request, res: Response, next: NextFuncti
 
     return res.json(newFriendship)
 }
+
+export default createFriendRequest
