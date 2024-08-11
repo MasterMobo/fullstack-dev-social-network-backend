@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Friendship } from "../../models/friendship";
-import { NotFoundError } from "../../errors";
+import { BadRequestError } from "../../errors";
 
 const deleteFriendship = async (req: Request, res: Response, next: NextFunction) => {
     const { senderID, receiverID } = req.body
@@ -11,10 +11,10 @@ const deleteFriendship = async (req: Request, res: Response, next: NextFunction)
     })
 
     if (friendship.deletedCount === 0) {
-        next(new NotFoundError("Friendship to delete not found!"));
+        return next(new BadRequestError("Invalid sender or receiver"));
     }
 
-    res.json(friendship);
+    return res.json(friendship);
 }
 
 export default deleteFriendship
