@@ -6,10 +6,12 @@ export { default as register } from "./auth/register"
 
 // Friend
 export { default as getFriends } from "./friend/getFriends"
+export { default as deleteFriendship } from "./friendship/deleteFriendship"
 
 // Friendship
 export { default as createFriendRequest } from "./friendship/createFriendRequest"
 export { default as getFriendships } from "./friendship/getFriendships"
+export { default as acceptFriendRequest } from "./friendship/acceptFriendRequest"
 
 // Profile
 export { default as getProfile } from "./profile/getProfile"
