@@ -7,6 +7,6 @@ const friendRouter = Router();
 
 friendRouter.get("/", getFriends);
 
-friendRouter.get("/requests", getFriendships);
+friendRouter.get("/request", getFriendships);
 
 export default friendRouter;
