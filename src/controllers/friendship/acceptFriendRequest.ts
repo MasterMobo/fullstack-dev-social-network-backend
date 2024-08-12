@@ -3,7 +3,11 @@ import { Friendship } from "../../models/friendship";
 import { BadRequestError } from "../../errors";
 
 const acceptFriendRequest = async (req: Request, res: Response, next: NextFunction) => {
-    const { senderID, receiverID } = req.body;
+    const { senderID, receiverID, status } = req.body;
+
+    if (!status || status !== "accepted") {
+        return next(new BadRequestError("Invalid request status"))
+    }
 
     const friendship = await Friendship.findOne({
         sender: senderID,
