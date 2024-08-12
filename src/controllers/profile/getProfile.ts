@@ -12,7 +12,7 @@ const getProfile = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     // TODO: Remove password from the response
-    return res.json(user);
+    return res.json({ user });
 };
 
 export default getProfile;

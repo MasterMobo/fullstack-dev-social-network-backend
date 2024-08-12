@@ -4,11 +4,14 @@ import { IUser } from "../models/user";
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
     // Assuming the cookie's content is a user object
-    const user: IUser = req.cookies("signedCookies")
+    // TODO: Implement the logic to check if the user is authenticated
+    // const user: IUser = req.cookies("signedCookies")
 
-    if (!user) {
-        next(new UnauthorizedError("401: User not authorized!"))
-    }
-}
+    // if (!user) {
+    //     next(new UnauthorizedError("401: User not authorized!"))
+    // }
 
-export default authMiddleware
+    next();
+};
+
+export default authMiddleware;

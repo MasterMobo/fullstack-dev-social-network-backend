@@ -23,7 +23,7 @@ const getFriends = async (req: Request, res: Response) => {
             _id: { $in: friendIDs }
         });
     
-        return res.json(friendList);
+        return res.json({ friends: friendList});
 };
 
 export default getFriends;
