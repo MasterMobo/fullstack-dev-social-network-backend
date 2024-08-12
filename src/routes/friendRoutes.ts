@@ -5,8 +5,8 @@ import getFriendships from "../controllers/friendship/getFriendships";
 
 const friendRouter = Router();
 
-friendRouter.get("/", getFriends);
+friendRouter.get("/:userId", getFriends);
 
-friendRouter.get("/request", getFriendships);
+friendRouter.get("/request/:userId", getFriendships);
 
 export default friendRouter;
