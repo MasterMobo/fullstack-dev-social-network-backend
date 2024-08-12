@@ -4,17 +4,17 @@ import { User } from "../../models/user";
 
 const getFriends = async (req: Request, res: Response) => {
 
-    const {userID} = req.body;
+    const {userId} = req.params;
     const friendships = await Friendship.find({
         $or: [
-            { sender: userID },
-            { receiver: userID }
+            { sender: userId },
+            { receiver: userId }
         ],
         status: "accepted"
     });
 
     const friendIDs = friendships.map(friendship =>
-        friendship.sender.toString() === userID
+        friendship.sender.toString() === userId
             ? friendship.receiver
             : friendship.sender
     );

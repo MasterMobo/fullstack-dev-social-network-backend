@@ -2,9 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { Friendship } from "../../models/friendship";
 import { User } from "../../models/user";
 const getFriendships = async (req: Request, res: Response) => {
-    const {userID} = req.body;
+    const {userId} = req.params;
     const friendships = await Friendship.find({
-        receiver: userID,
+        receiver: userId,
         status: "pending"
     });
 
