@@ -1,6 +1,6 @@
 import { Router } from "express";
-import getProfile from "../controllers/profile/getProfile";
-import asyncWrapper from "../middlewares/asyncWrapper";
+import { getProfile } from "../controllers"; 
+import { asyncWrapper } from "../middlewares";
 const profileRouter = Router();
 
 profileRouter.get("/:userId", asyncWrapper(getProfile));

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import getMe from "../controllers/user/getMe";
-import asyncWrapper from "../middlewares/asyncWrapper";
+import { getMe } from "../controllers";
+import { asyncWrapper } from "../middlewares";
 
 const userRouter = Router();
 
