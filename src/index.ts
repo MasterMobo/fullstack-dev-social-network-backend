@@ -4,11 +4,12 @@ import errorHandler from "./middlewares/errorHandler";
 import { authRouter, friendRouter } from "./routes/index";
 import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
+import env from "./config/env";
 
 const app = express();
 
 app.use(express.json());
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(env.COOKIE_SECRET));
 
 // Routes
 app.use("/auth", authRouter);
