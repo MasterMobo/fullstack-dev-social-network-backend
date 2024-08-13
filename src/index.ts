@@ -5,9 +5,11 @@ import { authRouter, friendRouter } from "./routes/index";
 import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
 import env from "./config/env";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser(env.COOKIE_SECRET));
 
