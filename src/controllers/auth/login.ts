@@ -16,9 +16,7 @@ const login: RequestHandler<unknown, unknown, ILogin, unknown> =
       if (!password)
         return res.status(401).json({ message: "Please enter your password." });
 
-      const user = await User.findOne({ email })
-        .select("+email +password")
-        .exec();
+      const user = await User.findOne({ email }).select("+password").exec();
       if (!user) {
         return res.status(401).json("Invalid email or password.");
       }
@@ -28,12 +26,13 @@ const login: RequestHandler<unknown, unknown, ILogin, unknown> =
         return res.status(401).json("Invalid email or password.");
       }
 
-      res
-        .cookie("userObj", user, { signed: true, maxAge: 60 * 60 * 1000 })
-        .json({
-          message: "Login successfully",
-          user: user,
-        });
+      const publicUser = user.toObject() as { [key: string]: any };
+      delete publicUser.password;
+
+      res.cookie("user", user, { signed: true, maxAge: 60 * 60 * 1000 }).json({
+        message: "Login successfully",
+        user: publicUser,
+      });
     } catch (error) {
       next(error);
     }

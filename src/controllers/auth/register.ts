@@ -35,11 +35,11 @@ const register: RequestHandler<unknown, unknown, IRegister, unknown> = async (
       profilePic: profilePic,
     });
 
-    const userObj = { fullName: fullName, profilePic: profilePic };
+    const publicUser = await User.findOne(newUser._id).exec();
 
     res
-      .cookie("userObj", newUser, { signed: true, maxAge: 60 * 60 * 1000 })
-      .json({ message: "Register succesfully", user: userObj });
+      .cookie("user", newUser, { signed: true, maxAge: 60 * 60 * 1000 })
+      .json({ message: "Register succesfully", user: publicUser });
   } catch (error) {
     next(error);
   }

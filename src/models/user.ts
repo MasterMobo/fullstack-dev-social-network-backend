@@ -9,7 +9,7 @@ interface IUser {
 
 const userSchema = new Schema<IUser>({
     fullName: { type: String, required: true },
-    email: { type: String, unique: true, required: true, select: false },
+    email: { type: String, unique: true, required: true },
     password: { type: String, required: true, select: false },
     profilePic: { type: String, required: true },
 });
