@@ -1,9 +1,15 @@
 import { Schema, model } from "mongoose";
 
+const supportedImageFormats = [
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "image/webp",
+    "image/avif",
+];
 interface IImage {
     name: string;
-    // Only allow PNG and JPEG files
-    data: { data: Buffer; contentType: "image/png" | "image/jpeg" };
+    data: { data: Buffer; contentType: string };
 }
 
 const ImageSchema = new Schema<IImage>({
@@ -13,4 +19,4 @@ const ImageSchema = new Schema<IImage>({
 
 const Image = model<IImage>("Image", ImageSchema);
 
-export { Image, IImage };
+export { Image, IImage, supportedImageFormats };

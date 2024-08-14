@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IImage, Image } from "../../models/image";
-import multer from "multer";
+import { IImage, Image, supportedImageFormats } from "../../models/image";
 import { BadRequestError } from "../../errors";
 
 const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,13 +8,12 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
             return next(new Error("No file uploaded"));
         }
 
-        // Only allow PNG and JPEG files
-        if (
-            req.file.mimetype !== "image/png" &&
-            req.file.mimetype !== "image/jpeg"
-        ) {
+        if (!supportedImageFormats.includes(req.file.mimetype)) {
             return next(
-                new BadRequestError("Please upload a PNG or JPEG file")
+                new BadRequestError(
+                    "Invalid image format. Supported formats are: " +
+                        supportedImageFormats.join(", ")
+                )
             );
         }
 
