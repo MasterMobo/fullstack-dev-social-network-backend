@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { getMe } from "../controllers";
-import { asyncWrapper, authMiddleware } from "../middlewares";
+import { asyncWrapper } from "../middlewares";
 
 const userRouter = Router();
 
-userRouter.get("/", authMiddleware, asyncWrapper(getMe));
+userRouter.get("/", asyncWrapper(getMe));
 
 export default userRouter;
