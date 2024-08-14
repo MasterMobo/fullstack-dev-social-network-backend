@@ -3,10 +3,10 @@ import { UnauthorizedError } from "../errors";
 import { IUser } from "../models/user";
 
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const user: IUser = req.signedCookies["user"]
+    const user: IUser = req.signedCookies["user"];
 
     if (!user) {
-        next(new UnauthorizedError("401: User not authorized!"))
+        return next(new UnauthorizedError("401: User not authorized!"));
     }
 
     next();

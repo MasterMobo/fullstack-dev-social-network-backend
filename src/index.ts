@@ -11,8 +11,6 @@ import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
 import env from "./config/env";
 import cors from "cors";
-import getImage from "./controllers/images/getImage";
-import { asyncWrapper } from "./middlewares";
 
 const app = express();
 

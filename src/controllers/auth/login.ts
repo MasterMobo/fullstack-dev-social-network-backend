@@ -28,7 +28,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     const publicUser = user.toObject() as { [key: string]: any };
     delete publicUser.password;
 
-    res.cookie("user", user, { signed: true, maxAge: 60 * 60 * 1000 }).json({
+    res.cookie("user", publicUser, {
+        signed: true,
+        maxAge: 60 * 60 * 1000,
+        httpOnly: true,
+    }).json({
         message: "Login successfully",
         user: publicUser,
     });
