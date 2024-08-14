@@ -10,8 +10,10 @@ const deleteFriendship = async (
     const { senderID, receiverID } = req.body;
 
     const friendship = await Friendship.deleteOne({
-        sender: senderID,
-        receiver: receiverID,
+        $or: [
+            { sender: senderID, receiver: receiverID },
+            { sender: receiverID, receiver: senderID },
+        ],
     });
 
     if (friendship.deletedCount === 0) {
