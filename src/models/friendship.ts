@@ -1,10 +1,10 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 import { IUser } from "./user";
 
 interface IFriendship {
-    sender: IUser;
-    receiver: IUser;
-    status: string;
+    sender: Types.ObjectId;
+    receiver: Types.ObjectId;
+    status: "pending" | "accepted";
 }
 
 const friendshipSchema = new Schema<IFriendship>({

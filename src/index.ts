@@ -1,7 +1,11 @@
-import "express-async-errors";
 import express from "express";
 import errorHandler from "./middlewares/errorHandler";
-import { authRouter, friendRouter } from "./routes/index";
+import {
+    authRouter,
+    friendRouter,
+    profileRouter,
+    userRouter,
+} from "./routes/index";
 import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
 import env from "./config/env";
@@ -15,6 +19,8 @@ app.use(cookieParser(env.COOKIE_SECRET));
 
 // Routes
 app.use("/auth", authRouter);
+app.use("/profile", profileRouter);
+app.use("/me", userRouter);
 app.use("/friends", friendRouter);
 app.use(errorHandler);
 
