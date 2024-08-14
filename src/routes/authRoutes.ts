@@ -1,13 +1,13 @@
 import { Router } from "express";
-
-import { login, register } from "../controllers";
-
+import { asyncWrapper } from "../middlewares";
+import { login, register, uploadImage } from "../controllers";
+import { singleFileUpload } from "../middlewares/fileUpload";
 const authRouter = Router();
 
-authRouter.post("/login", login);
+authRouter.post("/login", asyncWrapper(login));
 
-authRouter.post("/register", register);
+authRouter.post("/register", singleFileUpload, asyncWrapper(register));
 
-// authRouter.post("/upload", uploadController.uploadFiles);
+authRouter.post("/upload", asyncWrapper(uploadImage));
 
 export default authRouter;

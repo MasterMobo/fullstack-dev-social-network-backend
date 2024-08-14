@@ -1,29 +1,26 @@
-import util from "util";
-import multer from "multer";
-import { GridFsStorage } from "multer-gridfs-storage";
-import env from "../config/env";
+const util = require("util");
+const multer = require("multer");
+const { GridFsStorage } = require("multer-gridfs-storage");
+const dbConfig = require("../config/db");
 
-if (!env.MONGO_URI) {
-  throw new Error("MONGO_URI is not defined in the environment variables");
-}
+var storage = new GridFsStorage({
+    url: dbConfig.url + dbConfig.database,
+    options: { useNewUrlParser: true, useUnifiedTopology: true },
+    file: (req, file) => {
+        const match = ["image/png", "image/jpeg"];
 
-const storage = new GridFsStorage({
-  url: env.MONGO_URI,
-  file: (req, file) => {
-    const match = ["image/png", "image/jpeg"];
+        if (match.indexOf(file.mimetype) === -1) {
+            const filename = `${Date.now()}-${file.originalname}`;
+            return filename;
+        }
 
-    if (match.indexOf(file.mimetype) === -1) {
-      return `${Date.now()}${file.originalname}`;
-    }
-
-    return {
-      bucketName: "images",
-      filename: `${Date.now()}${file.originalname}`,
-    };
-  },
+        return {
+            bucketName: dbConfig.imgBucket,
+            filename: `${Date.now()}-${file.originalname}`,
+        };
+    },
 });
 
-const uploadFiles = multer({ storage }).single("profilePic");
-const uploadFilesMiddleware = util.promisify(uploadFiles);
-
-export default uploadFilesMiddleware;
+var uploadFiles = multer({ storage: storage }).single("file");
+var uploadFilesMiddleware = util.promisify(uploadFiles);
+module.exports = uploadFilesMiddleware;

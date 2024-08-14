@@ -9,13 +9,14 @@ interface IUser {
 
 const userSchema = new Schema<IUser>({
     fullName: { type: String, required: true },
-<<<<<<< HEAD
-    email: { type: String, unique: true, required: true },
+    // Check email using regex
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, "Invalid email address"],
+    },
     password: { type: String, required: true, select: false },
-=======
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
->>>>>>> dev
     profilePic: { type: String, required: true },
 });
 

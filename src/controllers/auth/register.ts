@@ -1,48 +1,52 @@
-import { Request, RequestHandler, Response } from "express";
+import e, { NextFunction, Request, RequestHandler, Response } from "express";
 import { User } from "../../models/user";
 import bcript from "bcryptjs";
-interface IRegister {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  profilePic?: string;
-}
+import { ConflictError, UnauthorizedError } from "../../errors";
+import uploadImage from "./upload";
 
-const register: RequestHandler<unknown, unknown, IRegister, unknown> = async (
-  req,
-  res,
-  next
-) => {
-  const { fullName, email, password, profilePic } = req.body;
+const register = async (req: Request, res: Response, next: NextFunction) => {
+    const { fullName, email, password } = req.body;
 
-  try {
-    if (!fullName || !email || !password || !profilePic) {
-      return res.status(400).json({ message: "Missing credentials." });
+    if (!fullName || !email || !password) {
+        return next(new UnauthorizedError("Missing credentials."));
     }
 
-    const user = await User.findOne({ email }).exec();
+    const user = await User.findOne({ email });
+
+    // Check if email is already taken
     if (user) {
-      return res.status(409).json({ message: "Email already taken." });
+        return next(new ConflictError("Email already taken."));
     }
 
+    // Hash password
     const salt = await bcript.genSalt();
     const passwordHashed = await bcript.hash(password, salt);
 
+    // Upload profile picture
+    const profilePic = await uploadImage(req, res, next);
+
+    if (!profilePic) {
+        // uploadImage will handle the error, so we just return here
+        return;
+    }
+
+    // Create new user
     const newUser = await User.create({
-      fullName: fullName,
-      email: email,
-      password: passwordHashed,
-      profilePic: profilePic,
+        fullName: fullName,
+        email: email,
+        password: passwordHashed,
+        profilePic,
     });
 
     const publicUser = await User.findOne(newUser._id).exec();
 
-    res
-      .cookie("user", newUser, { signed: true, maxAge: 60 * 60 * 1000 })
-      .json({ message: "Register succesfully", user: publicUser });
-  } catch (error) {
-    next(error);
-  }
+    res.cookie("user", publicUser, {
+        signed: true,
+        maxAge: 60 * 60 * 1000,
+    }).json({
+        message: "Registered successfully",
+        user: publicUser,
+    });
 };
 
 export default register;
