@@ -4,9 +4,8 @@ import { NotFoundError } from "../../errors";
 
 const getMe = async (req: Request, res: Response, next: NextFunction) => {
     // Get the user ID from signed cookie
-    // TODO: ADD COOKIE AUTHENTICATION
-    // const userId = req.signedCookies.user._id;
-    const user: IUser | null = await User.findById("66ba163105cd62c8df9e3922");
+    const { _id: userId } = req.signedCookies["user"];
+    const user: IUser | null = await User.findById(userId);
 
     if (!user) {
         next(new NotFoundError("User not found"));

@@ -5,18 +5,27 @@ import {
     friendRouter,
     profileRouter,
     userRouter,
+    imageRouter,
 } from "./routes/index";
 import { connectDB } from "./db/connectDB";
+import cookieParser from "cookie-parser";
+import env from "./config/env";
+import cors from "cors";
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
+app.use(cookieParser(env.COOKIE_SECRET));
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/me", userRouter);
 app.use("/friends", friendRouter);
+app.use("/images", imageRouter);
+
 app.use(errorHandler);
 
 const start = async () => {
