@@ -10,9 +10,9 @@ import {
 
 const friendRouter = Router();
 
-friendRouter.get("/:userId", authMiddleware, getFriends);
+friendRouter.get("/:userId", getFriends);
 
-friendRouter.get("/request/:userId", authMiddleware, getFriendships);
+friendRouter.get("/request/:userId", getFriendships);
 
 friendRouter.post(
     "/request",
