@@ -37,7 +37,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 
     const post = await Post.create(newPost);
 
-    res.json({ post });
+    return res.json({ post });
 };
 
 export default createPost;

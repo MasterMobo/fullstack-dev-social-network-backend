@@ -1,4 +1,4 @@
-import e, { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "../../models/user";
 import bcript from "bcryptjs";
 import { ConflictError, UnauthorizedError } from "../../errors";

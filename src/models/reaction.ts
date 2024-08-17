@@ -1,17 +1,11 @@
-import { Schema, model } from "mongoose";
+import { Types } from "mongoose";
 import { IUser } from "./user";
+
 interface IReaction {
-    reaction: "Like" | "Love" | "Haha" | "Angry";
+    reaction: string;
     users: IUser[];
 }
 
-const ReactionShema = new Schema<IReaction>({
-    reaction: {
-        type: String,
-        enum: ["Like", "Love", "Haha", "Angry"],
-    },
-    users: Array<IUser>,
-});
-const Reaction = model<IReaction>("Reaction", ReactionShema);
+const allowedReactions = ["Like", "Love", "Haha", "Angry"];
 
-export { Reaction, IReaction };
+export { IReaction, allowedReactions };
