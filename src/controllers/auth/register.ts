@@ -2,7 +2,7 @@ import e, { NextFunction, Request, RequestHandler, Response } from "express";
 import { User } from "../../models/user";
 import bcript from "bcryptjs";
 import { ConflictError, UnauthorizedError } from "../../errors";
-import uploadImage from "./upload";
+import uploadImage from "../upload/uploadImage";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
     const { fullName, email, password } = req.body;

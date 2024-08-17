@@ -4,26 +4,28 @@ import { IComment } from "./comment";
 import { IEditHistory } from "./editHistory";
 
 interface IPost {
-  text: String;
-  comments: IComment[];  
-  userID: Types.ObjectId; 
-  images: String[];  
-  reactions: IReaction[];  
-  visibility:"Public" | "Friends"; 
-  editHistory: IEditHistory[];  
+    text: String;
+    userID: Types.ObjectId;
+    images: String[];
+    reactions: IReaction[];
+    visibility: "public" | "friends";
+    editHistory: IEditHistory[];
+    postedAt: Date;
 }
 
-const PostSchema = new Schema<IPost>(
-  {
+const PostSchema = new Schema<IPost>({
     text: { type: String, required: true },
-    comments: Array<IComment>, 
-    userID: { type: Schema.Types.ObjectId, ref: "User", required: true },  
-    images: [String],  // Array of image URLs
-    reactions: Array<IReaction>, 
-    visibility: { type: String, enum: ["Public", "Friends"], default: "Public" }, 
-    editHistory: Array<IEditHistory>, 
-  },
-);
+    userID: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    images: [String], // Array of image URLs
+    reactions: Array<IReaction>,
+    visibility: {
+        type: String,
+        enum: ["public", "friends"],
+        default: "public",
+    },
+    editHistory: Array<IEditHistory>,
+    postedAt: { type: Date, default: Date.now },
+});
 
 const Post = model<IPost>("Post", PostSchema);
 

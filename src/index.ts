@@ -11,6 +11,7 @@ import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
 import env from "./config/env";
 import cors from "cors";
+import postRouter from "./routes/postRoutes";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use("/auth", authRouter);
 app.use("/profile", profileRouter);
 app.use("/me", userRouter);
 app.use("/friends", friendRouter);
+app.use("/posts", postRouter);
 app.use("/images", imageRouter);
 
 app.use(errorHandler);
