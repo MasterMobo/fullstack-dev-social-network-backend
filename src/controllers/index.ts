@@ -3,7 +3,7 @@
 // Auth
 export { default as login } from "./auth/login";
 export { default as register } from "./auth/register";
-export { default as uploadImage } from "./auth/upload";
+export { default as uploadImage } from "./upload/uploadImage";
 
 // Friend
 export { default as getFriends } from "./friend/getFriends";

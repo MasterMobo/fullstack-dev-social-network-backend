@@ -21,8 +21,7 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
             name: req.file.originalname + "-" + Date.now(),
             data: {
                 data: req.file.buffer,
-
-                contentType: req.file.mimetype as "image/png" | "image/jpeg",
+                contentType: req.file.mimetype,
             },
         };
 
