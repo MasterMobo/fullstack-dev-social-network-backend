@@ -18,3 +18,5 @@ const createComment = async (req:Request, res: Response, next: NextFunction)=>{
     const comment = await Comment.create(newComment);
     res.status(200).json(newComment);
 };
+
+export default createComment;

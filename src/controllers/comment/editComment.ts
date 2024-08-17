@@ -22,8 +22,8 @@ const editComment = async (req:Request, res: Response, next: NextFunction)=>{
         updateAt: new Date(),
     };
 
-    const updateComment = Comment.findOneAndUpdate(
-        new Types.ObjectId(commentId),
+    const updateComment = await Comment.findByIdAndUpdate(
+       commentId,
         {
             text: text,
             editHistory: [...comment.editHistory,newEditHistory]
@@ -31,3 +31,5 @@ const editComment = async (req:Request, res: Response, next: NextFunction)=>{
         {new: true}).exec();
     res.status(200).json(updateComment);
 };
+
+export default editComment;
