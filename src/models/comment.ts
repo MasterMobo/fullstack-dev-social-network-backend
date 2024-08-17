@@ -2,6 +2,7 @@ import { Schema, model, Types } from "mongoose";
 import { IReaction } from "./reaction";
 import { IEditHistory } from "./editHistory";
 interface IComment {
+    _id: Types.ObjectId;
     postID: Types.ObjectId;
     text: String;
     reactions: IReaction[];
