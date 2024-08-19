@@ -46,6 +46,12 @@ postRouter.get(
     asyncWrapper(getComment)
 )
 
+postRouter.get(
+    "/posts/:postId/comment",
+    authMiddleware,
+    asyncWrapper(getComment)
+);
+
 postRouter.get("/:postID", getPostById);
 
 postRouter.get("/user/:userID", getPostsByUserId);
