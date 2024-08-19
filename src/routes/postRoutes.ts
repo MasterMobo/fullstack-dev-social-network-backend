@@ -8,6 +8,9 @@ import addPostReaction from "../controllers/post/addPostReaction";
 import editPostReaction from "../controllers/post/editPostReaction";
 import removePostReaction from "../controllers/post/removePostReaction";
 import getComment from "../controllers/post/getComment";
+import getPostById from "../controllers/post/getPostById";
+import getPostsByUserId from "../controllers/post/getPostsByUserId";
+import getPostFeed from "../controllers/post/getPostFeed";
 
 const postRouter = Router();
 
@@ -42,5 +45,11 @@ postRouter.get(
     authMiddleware, 
     asyncWrapper(getComment)
 )
+
+postRouter.get("/:postID", getPostById);
+
+postRouter.get("/user/:userID", getPostsByUserId);
+
+postRouter.get("/feed/:userId", getPostFeed);
 
 export default postRouter;
