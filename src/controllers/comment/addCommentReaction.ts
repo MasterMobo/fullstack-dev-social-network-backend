@@ -18,7 +18,6 @@ const addCommentReaction = async (
     if (!user) {
         return next(new NotFoundError("User not found"));
     }
-
     // Check if post exists
     const post = await Post.findById(postId).exec();
     if (!post) {
