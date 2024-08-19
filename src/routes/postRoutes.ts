@@ -7,6 +7,7 @@ import editPost from "../controllers/post/editPost";
 import addPostReaction from "../controllers/post/addPostReaction";
 import editPostReaction from "../controllers/post/editPostReaction";
 import removePostReaction from "../controllers/post/removePostReaction";
+import getComment from "../controllers/post/getComment";
 
 const postRouter = Router();
 
@@ -35,5 +36,11 @@ postRouter.delete(
     authMiddleware,
     asyncWrapper(removePostReaction)
 );
+
+postRouter.get(
+    "/:postId/comment", 
+    authMiddleware, 
+    asyncWrapper(getComment)
+)
 
 export default postRouter;
