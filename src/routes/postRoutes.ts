@@ -59,6 +59,6 @@ postRouter.get("/user/:userID", authMiddleware, asyncWrapper(getPostsByUserId));
 
 postRouter.get("/posts/me", authMiddleware, asyncWrapper(getMyPosts));
 
-postRouter.get("/feed/:userId", getPostFeed);
+postRouter.get("/feed/:userId", authMiddleware, asyncWrapper(getPostFeed));
 
 export default postRouter;
