@@ -11,6 +11,7 @@ import getComment from "../controllers/post/getComment";
 import getPostById from "../controllers/post/getPostById";
 import getPostsByUserId from "../controllers/post/getPostsByUserId";
 import getPostFeed from "../controllers/post/getPostFeed";
+import getMyPosts from "../controllers/post/getMyPost";
 
 const postRouter = Router();
 
@@ -52,9 +53,11 @@ postRouter.get(
     asyncWrapper(getComment)
 );
 
-postRouter.get("/:postID", getPostById);
+postRouter.get("/:postID", authMiddleware, asyncWrapper(getPostById));
 
-postRouter.get("/user/:userID", getPostsByUserId);
+postRouter.get("/user/:userID", authMiddleware, asyncWrapper(getPostsByUserId));
+
+postRouter.get("/posts/me", authMiddleware, asyncWrapper(getMyPosts));
 
 postRouter.get("/feed/:userId", getPostFeed);
 
