@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { manyFilesUpload } from "../middlewares/fileUpload";
 import createPost from "../controllers/post/createPost";
-import { asyncWrapper, authMiddleware } from "../middlewares";
+import { asyncWrapper } from "../middlewares";
 
 import editPost from "../controllers/post/editPost";
 import addPostReaction from "../controllers/post/addPostReaction";
@@ -18,77 +18,49 @@ import editComment from "../controllers/comment/editComment";
 import addCommentReaction from "../controllers/comment/addCommentReaction";
 import editCommentReaction from "../controllers/comment/editCommentReaction";
 import removeCommentReaction from "../controllers/comment/removeCommentReaction";
+
 const postRouter = Router();
 
-postRouter.post(
-    "/",
-    authMiddleware,
-    manyFilesUpload("images"),
-    asyncWrapper(createPost)
-);
-postRouter.patch("/:postId", authMiddleware, asyncWrapper(editPost));
+// User posts
+postRouter.get("/user/:userID", asyncWrapper(getPostsByUserId));
 
-postRouter.post(
-    "/:postId/reaction",
-    authMiddleware,
-    asyncWrapper(addPostReaction)
-);
+postRouter.get("/me", asyncWrapper(getMyPosts));
 
-postRouter.patch(
-    "/:postId/reaction",
-    authMiddleware,
-    asyncWrapper(editPostReaction)
-);
+postRouter.get("/feed/:userId", asyncWrapper(getPostFeed));
 
-postRouter.delete(
-    "/:postId/reaction",
-    authMiddleware,
-    asyncWrapper(removePostReaction)
-);
+// Posts
+postRouter.post("/", manyFilesUpload("images"), asyncWrapper(createPost));
 
-postRouter.post(
-    "/:postId/comment",
-    authMiddleware,
-    asyncWrapper(createComment)
-)
+postRouter.get("/:postID", asyncWrapper(getPostById));
 
-postRouter.patch(
-    "/:postId/comment/:commentId",
-    authMiddleware,
-    asyncWrapper(editComment)
-)
+postRouter.patch("/:postId", asyncWrapper(editPost));
+
+postRouter.post("/:postId/reaction", asyncWrapper(addPostReaction));
+
+postRouter.patch("/:postId/reaction", asyncWrapper(editPostReaction));
+
+postRouter.delete("/:postId/reaction", asyncWrapper(removePostReaction));
+
+// Comments
+postRouter.post("/:postId/comment", asyncWrapper(createComment));
+
+postRouter.get("/:postId/comment", asyncWrapper(getComment));
+
+postRouter.patch("/:postId/comment/:commentId", asyncWrapper(editComment));
+
 postRouter.post(
     "/:postId/comment/:commentId/reaction",
-    authMiddleware,
     asyncWrapper(addCommentReaction)
-)
+);
+
 postRouter.patch(
     "/:postId/comment/:commentId/reaction",
     asyncWrapper(editCommentReaction)
-)
+);
+
 postRouter.delete(
     "/:postId/comment/:commentId/reaction",
     asyncWrapper(removeCommentReaction)
-)
-
-postRouter.get(
-    "/:postId/comment", 
-    authMiddleware, 
-    asyncWrapper(getComment)
-)
-
-postRouter.get(
-    "/posts/:postId/comment",
-    authMiddleware,
-    asyncWrapper(getComment)
 );
-
-postRouter.get("/:postID", authMiddleware, asyncWrapper(getPostById));
-
-postRouter.get("/user/:userID", authMiddleware, asyncWrapper(getPostsByUserId));
-
-postRouter.get("/posts/me", authMiddleware, asyncWrapper(getMyPosts));
-
-postRouter.get("/feed/:userId", authMiddleware, asyncWrapper(getPostFeed));
 
 export default postRouter;

@@ -12,6 +12,7 @@ import cookieParser from "cookie-parser";
 import env from "./config/env";
 import cors from "cors";
 import postRouter from "./routes/postRoutes";
+import { authMiddleware } from "./middlewares";
 
 const app = express();
 
@@ -22,11 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/auth", authRouter);
-app.use("/profile", profileRouter);
-app.use("/me", userRouter);
-app.use("/friends", friendRouter);
-app.use("/posts", postRouter);
-app.use("/images", imageRouter);
+app.use("/profile", authMiddleware, profileRouter);
+app.use("/me", authMiddleware, userRouter);
+app.use("/friends", authMiddleware, friendRouter);
+app.use("/posts", authMiddleware, postRouter);
+app.use("/images", authMiddleware, imageRouter);
 
 app.use(errorHandler);
 
