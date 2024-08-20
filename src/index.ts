@@ -6,6 +6,7 @@ import {
     profileRouter,
     userRouter,
     imageRouter,
+    adminRouter,
 } from "./routes/index";
 import { connectDB } from "./db/connectDB";
 import cookieParser from "cookie-parser";
@@ -28,6 +29,7 @@ app.use("/me", authMiddleware, userRouter);
 app.use("/friends", authMiddleware, friendRouter);
 app.use("/posts", authMiddleware, postRouter);
 app.use("/images", authMiddleware, imageRouter);
+app.use("/admin", authMiddleware,adminRouter);
 
 app.use(errorHandler);
 

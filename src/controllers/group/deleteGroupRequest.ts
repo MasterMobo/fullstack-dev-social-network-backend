@@ -1,9 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import {BadRequestError,NotFoundError,} from "../../errors";
+import {BadRequestError,NotFoundError, UnauthorizedError} from "../../errors";
 import { IGroup, Group } from "../../models/group";
+import { IUser, Admin } from "../../models/user";
 
 const deleteGroupRequest = async (req:Request, res:Response, next:NextFunction)=> {
     const {groupId} = req.body;
+    const admin: IUser = req.signedCookies["user"];
+
+    if( !await Admin.findById(admin._id)){
+        return next(new UnauthorizedError("401: User not authorized!"));
+    }
+    
     if(!groupId){
         return next(new BadRequestError("Invalid groupId "));
     }
