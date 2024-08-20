@@ -6,6 +6,7 @@ interface IUser {
     email: string;
     password: string;
     profilePic: string;
+    friends: Types.ObjectId[]
 }
 
 const userSchema = new Schema<IUser>({
@@ -19,6 +20,7 @@ const userSchema = new Schema<IUser>({
     },
     password: { type: String, required: true, select: false },
     profilePic: { type: String, required: true },
+    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 
 const User = model<IUser>("User", userSchema);

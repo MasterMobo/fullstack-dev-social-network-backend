@@ -7,6 +7,11 @@ import editPost from "../controllers/post/editPost";
 import addPostReaction from "../controllers/post/addPostReaction";
 import editPostReaction from "../controllers/post/editPostReaction";
 import removePostReaction from "../controllers/post/removePostReaction";
+import getComment from "../controllers/post/getComment";
+import getPostById from "../controllers/post/getPostById";
+import getPostsByUserId from "../controllers/post/getPostsByUserId";
+import getPostFeed from "../controllers/post/getPostFeed";
+import getMyPosts from "../controllers/post/getMyPost";
 
 import createComment from "../controllers/comment/createComment";
 import editComment from "../controllers/comment/editComment";
@@ -65,4 +70,25 @@ postRouter.delete(
     "/:postId/comment/:commentId/reaction",
     asyncWrapper(removeCommentReaction)
 )
+
+postRouter.get(
+    "/:postId/comment", 
+    authMiddleware, 
+    asyncWrapper(getComment)
+)
+
+postRouter.get(
+    "/posts/:postId/comment",
+    authMiddleware,
+    asyncWrapper(getComment)
+);
+
+postRouter.get("/:postID", authMiddleware, asyncWrapper(getPostById));
+
+postRouter.get("/user/:userID", authMiddleware, asyncWrapper(getPostsByUserId));
+
+postRouter.get("/posts/me", authMiddleware, asyncWrapper(getMyPosts));
+
+postRouter.get("/feed/:userId", authMiddleware, asyncWrapper(getPostFeed));
+
 export default postRouter;
