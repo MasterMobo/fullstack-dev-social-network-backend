@@ -5,5 +5,8 @@ interface IEditHistory {
     text: String;
     visibility: "public" | "friends";
 }
-
-export { IEditHistory };
+interface ICommentEditHistory {
+    updateAt: Date;
+    text: String;
+}
+export { IEditHistory, ICommentEditHistory };

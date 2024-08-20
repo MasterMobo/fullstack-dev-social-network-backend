@@ -13,6 +13,11 @@ import getPostsByUserId from "../controllers/post/getPostsByUserId";
 import getPostFeed from "../controllers/post/getPostFeed";
 import getMyPosts from "../controllers/post/getMyPost";
 
+import createComment from "../controllers/comment/createComment";
+import editComment from "../controllers/comment/editComment";
+import addCommentReaction from "../controllers/comment/addCommentReaction";
+import editCommentReaction from "../controllers/comment/editCommentReaction";
+import removeCommentReaction from "../controllers/comment/removeCommentReaction";
 const postRouter = Router();
 
 postRouter.post(
@@ -40,6 +45,31 @@ postRouter.delete(
     authMiddleware,
     asyncWrapper(removePostReaction)
 );
+
+postRouter.post(
+    "/:postId/comment",
+    authMiddleware,
+    asyncWrapper(createComment)
+)
+
+postRouter.patch(
+    "/:postId/comment/:commentId",
+    authMiddleware,
+    asyncWrapper(editComment)
+)
+postRouter.post(
+    "/:postId/comment/:commentId/reaction",
+    authMiddleware,
+    asyncWrapper(addCommentReaction)
+)
+postRouter.patch(
+    "/:postId/comment/:commentId/reaction",
+    asyncWrapper(editCommentReaction)
+)
+postRouter.delete(
+    "/:postId/comment/:commentId/reaction",
+    asyncWrapper(removeCommentReaction)
+)
 
 postRouter.get(
     "/:postId/comment", 
