@@ -1,28 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import { BadRequestError, NotFoundError } from "../../errors";
 import { Post } from "../../models/post";
-import { User } from "../../models/user";
+import { Friendship } from "../../models/friendship";
+import { BadRequestError, NotFoundError } from "../../errors";
 
-const getPostFeed = async(req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.userId;
+const getPostFeed = async (req: Request, res: Response, next: NextFunction) => {
+  const { _id: currentUserId } = req.signedCookies["user"];
 
-    // Get the user's friends
-    const user = await User.findById(userId).populate('friends').exec();
-    if (!user) {
-        return next(new BadRequestError("User not found."));
-    }
+  // Get the friends' IDs
+  const friendships = await Friendship.find({
+    $or: [{ sender: currentUserId }, { receiver: currentUserId }],
+    status: "accepted",
+  });
 
-    // Get public posts and posts from friends
-    const posts = await Post.find({
-        $or: [
-            { visibility: "public" },
-            { userID: { $in: user.friends } }
-        ]
-    })
+  const friendIDs = friendships.map((friendship) =>
+    friendship.sender.toString() === currentUserId.toString()
+      ? friendship.receiver
+      : friendship.sender
+  );
+
+  // Include the current user's ID in the list of friendIDs
+  friendIDs.push(currentUserId);
+
+  // Get posts from the current user and their friends
+  const posts = await Post.find({
+    userID: { $in: friendIDs },
+  })
     .sort({ postedAt: -1 }) // Sort by date, newest first
     .exec();
 
-    res.json({ posts });
+  res.json({ posts });
 };
 
 export default getPostFeed;

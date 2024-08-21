@@ -3,33 +3,36 @@ import { Post } from "../../models/post";
 import { BadRequestError } from "../../errors";
 import { Types } from "mongoose";
 import { User } from "../../models/user";
+import { Friendship } from "../../models/friendship";
 
 const getPostsByUserId = async (req: Request, res: Response, next: NextFunction) => {
-    const { userID } = req.params;
-    const { _id: currentUserId } = req.signedCookies["user"];
+  const { userID } = req.params;
+  const { _id: currentUserId } = req.signedCookies["user"];
 
-    // If the userID is the current user, return all posts
-    if (userID === currentUserId.toString()) {
-        const posts = await Post.find({ userID }).exec();
-        return res.status(200).json({ posts });
-    }
+  // If the userID is the current user, return all posts
+  if (userID === currentUserId.toString()) {
+    const posts = await Post.find({ userID }).exec();
+    return res.json({ posts });
+  }
 
-    // Find the current user to check their friends list
-    const currentUser = await User.findById(currentUserId).exec();
+  // Check if they are friends
+  const friendship = await Friendship.findOne({
+    $or: [
+      { sender: currentUserId, receiver: userID },
+      { sender: userID, receiver: currentUserId },
+    ],
+    status: "accepted",
+  }).exec();
 
-    if (!currentUser) {
-        return next(new BadRequestError("Current user not found."));
-    }
+  // If they are friends, return all posts
+  if (friendship) {
+    const posts = await Post.find({ userID }).exec();
+    return res.json({ posts });
+  }
 
-    // If the userID is a friend, return all posts
-    if (currentUser.friends.some(friendId => friendId.equals(new Types.ObjectId(userID)))) {
-        const posts = await Post.find({ userID }).exec();
-        return res.status(200).json({ posts });
-    }
-
-    // Otherwise, return only public posts
-    const publicPosts = await Post.find({ userID, visibility: "public" }).exec();
-    return res.status(200).json({ posts: publicPosts });
+  // Otherwise, return only public posts
+  const publicPosts = await Post.find({ userID, visibility: "public" }).exec();
+  return res.json({ posts: publicPosts });
 };
 
 export default getPostsByUserId;
