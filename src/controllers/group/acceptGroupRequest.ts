@@ -7,8 +7,8 @@ const acceptGroupRequest = async(req:Request, res: Response, next: NextFunction)
     if( !await Admin.findById(admin._id)){
         return next(new UnauthorizedError("401: User not authorized!"));
     }
-
-    const {groupId,status} = req.body;
+    const  {groupId} = req.params;
+    const {status} = req.body;
     if (!status || status !== "accepted") {
         return next(new BadRequestError("Invalid request status"));
     }

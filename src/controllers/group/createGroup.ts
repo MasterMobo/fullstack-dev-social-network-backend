@@ -4,10 +4,14 @@ import { IUser, User } from "../../models/user";
 import { IGroup, Group } from "../../models/group";
 
 const createGroup = async (req:Request, res:Response, next: NextFunction)=>{
-    const {name, groupPicture, userID, visibility} = req.body;
-    const admin: IUser| null = await User.findById(userID);
+    const {name, groupPicture, userId, visibility} = req.body;
+    if(!userId){
+        return next(new BadRequestError("Must provide userId"));
 
-    if(!admin){
+    }
+    const groupAdmin: IUser| null = await User.findById(userId);
+
+    if(!groupAdmin){
         return next(new NotFoundError("User can't be found!"));
     }
 
@@ -25,8 +29,8 @@ const createGroup = async (req:Request, res:Response, next: NextFunction)=>{
         name:name,
         groupPicture: groupPicture,
         visibility: visibility,
-        members: [admin],
-        admins: [admin],
+        members: [groupAdmin],
+        admins: [groupAdmin],
         status: "pending"
     }
     const group = await Group.create(newGroup);

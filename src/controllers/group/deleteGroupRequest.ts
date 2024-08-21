@@ -4,7 +4,7 @@ import { IGroup, Group } from "../../models/group";
 import { IUser, Admin } from "../../models/user";
 
 const deleteGroupRequest = async (req:Request, res:Response, next:NextFunction)=> {
-    const {groupId} = req.body;
+    const {groupId} = req.params;
     const admin: IUser = req.signedCookies["user"];
 
     if( !await Admin.findById(admin._id)){

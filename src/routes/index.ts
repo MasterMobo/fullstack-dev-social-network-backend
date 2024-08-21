@@ -4,4 +4,5 @@ import profileRouter from "./profileRoutes";
 import userRouter from "./userRoutes";
 import imageRouter from "./imageRoutes";
 import adminRouter from "./adminRoutes";
-export { authRouter, friendRouter, profileRouter, userRouter, imageRouter, adminRouter };
+import groupRouter from "./groupRoutes";
+export { authRouter, friendRouter, profileRouter, userRouter, imageRouter, adminRouter, groupRouter };

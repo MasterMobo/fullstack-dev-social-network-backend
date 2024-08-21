@@ -8,7 +8,7 @@ const getAllGroupRequest = async (req: Request, res: Response, next:NextFunction
         return next(new UnauthorizedError("401: User not authorized!"));
     }
 
-    const groups = await Group.find();
+    const groups = await Group.find({status: "pending"});
     res.status(200).json(groups);
 }
 
