@@ -31,7 +31,6 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
         visibility: visibility,
         images: imageUrls,
         reactions: [],
-        comments: [],
         editHistory: [],
         postedAt: new Date(),
     };

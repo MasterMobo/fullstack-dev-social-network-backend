@@ -8,7 +8,6 @@ interface IPost {
     userID: Types.ObjectId;
     images: String[];
     reactions: IReaction[];
-    comments: IComment[];
     visibility: "public" | "friends";
     editHistory: IEditHistory[];
     postedAt: Date;
@@ -19,7 +18,6 @@ const PostSchema = new Schema<IPost>({
     userID: { type: Schema.Types.ObjectId, ref: "User", required: true },
     images: [String], // Array of image URLs
     reactions: Array<IReaction>,
-    comments: Array<IComment>,
     visibility: {
         type: String,
         enum: ["public", "friends"],

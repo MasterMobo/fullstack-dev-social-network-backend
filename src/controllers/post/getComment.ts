@@ -1,17 +1,25 @@
 import { Request, Response, NextFunction } from "express";
 import { BadRequestError, NotFoundError } from "../../errors";
-import { Post } from "../../models/post";
+import { Comment } from "../../models/comment";
+import { Types } from "mongoose";
 
 const getComment = async (req: Request, res: Response, next: NextFunction) => {
   const { postId } = req.params;
 
-  const post = await Post.findById(postId).populate("comments").exec();
-
-  if (!post) {
-    return next(new BadRequestError("Post not found."));
+  // Validate the postId
+  if (!Types.ObjectId.isValid(postId)) {
+    return next(new BadRequestError("Invalid post id"));
   }
 
-  res.status(200).json({ comments: post.comments });
+  // Find comments by postId
+  const comments = await Comment.find({ postID: postId }).exec();
+
+  if (!comments) {
+    return next(new NotFoundError("Comments not found"));
+  }
+
+  // Respond with the comments
+  return res.json({ comments });
 };
 
 export default getComment;
