@@ -6,4 +6,5 @@ const userRouter = Router();
 
 userRouter.get("/", asyncWrapper(getMe));
 
+
 export default userRouter;
