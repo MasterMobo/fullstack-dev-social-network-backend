@@ -22,5 +22,6 @@ const userSchema = new Schema<IUser>({
 });
 
 const User = model<IUser>("User", userSchema);
+const Admin = model<IUser>("User",userSchema,"admins");
 
-export { User, IUser };
+export { User, Admin, IUser };
