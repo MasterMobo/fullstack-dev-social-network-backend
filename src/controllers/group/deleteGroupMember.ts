@@ -6,23 +6,24 @@ import {
 } from "../../errors";
 import { IGroup, Group } from "../../models/group";
 import { IUser, Admin } from "../../models/user";
+import { Types } from "mongoose";
 
 const deleteGroupMember = async (
     req: Request,
     res: Response,
     next: NextFunction
 ) => {
-    const { groupId } = req.params;
-    const { userId } = req.body;
+    const { groupId, memberId } = req.params;
 
     if (!groupId) {
         return next(new BadRequestError("Must provide groupId"));
     }
 
-    if (!userId) {
-        return next(new BadRequestError("Must provide userId"));
+    if (!memberId) {
+        return next(new BadRequestError("Must provide memberId"));
     }
 
+    const memberObjectId = new Types.ObjectId(memberId);
     const group = await Group.findById(groupId);
 
     if (!group) {
@@ -30,16 +31,31 @@ const deleteGroupMember = async (
     }
 
     const groupAdmin: IUser = req.signedCookies["user"];
+    const groupAdminObjectId = new Types.ObjectId(groupAdmin._id);
 
-    if (group.admins[0]._id != groupAdmin._id) {
+    if (!group.admins[0]._id.equals(groupAdminObjectId)) {
         return next(new UnauthorizedError("401: User not authorized!"));
     }
 
+    if (group.admins[0]._id.equals(memberObjectId)) {
+        return next(new BadRequestError("Cannot delete admin"));
+    }
+
+    if (groupAdminObjectId.equals(memberObjectId)) {
+        return next(new BadRequestError("Cannot delete yourself"));
+    }
+
     const newMembers = group.members.filter(
-        (member: IUser) => member._id != userId
+        (member: IUser) => !member._id.equals(memberObjectId)
     );
 
-    res.status(200).json(group);
+    const newGroupMember = await Group.findByIdAndUpdate(
+        groupId,
+        { members: newMembers },
+        { new: true }
+    ).exec();
+
+    res.status(200).json(newGroupMember);
 };
 
 export default deleteGroupMember;
