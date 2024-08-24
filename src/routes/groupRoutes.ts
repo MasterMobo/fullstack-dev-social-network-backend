@@ -10,6 +10,6 @@ groupRouter.post("/request", asyncWrapper(createGroup));
 
 groupRouter.get("/:userId/accepted", asyncWrapper(getUserAcceptedGroup));
 
-groupRouter.delete("/:groupId/members", asyncWrapper(deleteGroupMember));
+groupRouter.delete("/:groupId/members/:memberId", asyncWrapper(deleteGroupMember));
 
 export default groupRouter;
