@@ -15,6 +15,7 @@ import env from "./config/env";
 import cors from "cors";
 import postRouter from "./routes/postRoutes";
 import { authMiddleware } from "./middlewares";
+import notFoundHandler from "./middlewares/notFoundHandler";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/posts", authMiddleware, postRouter);
 app.use("/admin", authMiddleware, adminRouter);
 app.use("/groups", authMiddleware, groupRouter);
 app.use("/images", imageRouter);
+app.use("*", notFoundHandler);
 
 app.use(errorHandler);
 
