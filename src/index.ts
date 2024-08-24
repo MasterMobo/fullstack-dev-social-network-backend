@@ -29,9 +29,9 @@ app.use("/profile", authMiddleware, profileRouter);
 app.use("/me", authMiddleware, userRouter);
 app.use("/friends", authMiddleware, friendRouter);
 app.use("/posts", authMiddleware, postRouter);
-app.use("/images", authMiddleware, imageRouter);
-app.use("/admin", authMiddleware,adminRouter);
+app.use("/admin", authMiddleware, adminRouter);
 app.use("/groups", authMiddleware, groupRouter);
+app.use("/images", imageRouter);
 
 app.use(errorHandler);
 
