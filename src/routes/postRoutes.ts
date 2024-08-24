@@ -18,6 +18,7 @@ import editComment from "../controllers/comment/editComment";
 import addCommentReaction from "../controllers/comment/addCommentReaction";
 import editCommentReaction from "../controllers/comment/editCommentReaction";
 import removeCommentReaction from "../controllers/comment/removeCommentReaction";
+import getCommentById from "../controllers/post/getCommentById";
 
 const postRouter = Router();
 
@@ -45,6 +46,8 @@ postRouter.delete("/:postId/reaction", asyncWrapper(removePostReaction));
 postRouter.post("/:postId/comment", asyncWrapper(createComment));
 
 postRouter.get("/:postId/comment", asyncWrapper(getComment));
+
+postRouter.get("/:postId/comment/:commentId", asyncWrapper(getCommentById));
 
 postRouter.patch("/:postId/comment/:commentId", asyncWrapper(editComment));
 
