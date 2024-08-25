@@ -32,7 +32,10 @@ const getGroupPosts = async (
     }
 
     // Find all posts in the group
-    const posts = await Post.find({ groupID: groupId }).exec();
+    const posts = await Post.find({ group: groupId })
+        .populate("user")
+        .populate("group")
+        .exec();
 
     return res.json({ posts });
 };

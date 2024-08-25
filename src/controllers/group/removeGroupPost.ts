@@ -11,7 +11,7 @@ const removeGroupPost = async (
     const { groupId, postId } = req.params;
 
     // Check if post exists
-    const post = await Post.findOne({ _id: postId, groupID: groupId }).exec();
+    const post = await Post.findOne({ _id: postId, group: groupId }).exec();
     if (!post) {
         return next(new NotFoundError("Post not found"));
     }

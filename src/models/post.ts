@@ -5,8 +5,8 @@ import { IEditHistory } from "./editHistory";
 
 interface IPost {
     text: String;
-    userID: Types.ObjectId;
-    groupID?: Types.ObjectId;
+    user: Types.ObjectId;
+    group?: Types.ObjectId;
     images: String[];
     reactions: IReaction[];
     visibility: "public" | "friends";
@@ -16,8 +16,8 @@ interface IPost {
 
 const PostSchema = new Schema<IPost>({
     text: { type: String, required: true },
-    userID: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    groupID: { type: Schema.Types.ObjectId, ref: "Group" },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    group: { type: Schema.Types.ObjectId, ref: "Group" },
     images: [String], // Array of image URLs
     reactions: Array<IReaction>,
     visibility: {

@@ -26,7 +26,7 @@ const editPost = async (req: Request, res: Response, next: NextFunction) => {
     // Check if current user is the author of the post
     const user: IUser = req.signedCookies["user"];
 
-    if (!post.userID.equals(user._id)) {
+    if (!post.user.equals(user._id)) {
         return next(
             new UnauthorizedError("You are not the author of this post")
         );

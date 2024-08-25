@@ -7,7 +7,7 @@ import editPost from "../controllers/post/editPost";
 import addPostReaction from "../controllers/post/addPostReaction";
 import editPostReaction from "../controllers/post/editPostReaction";
 import removePostReaction from "../controllers/post/removePostReaction";
-import getComment from "../controllers/post/getComment";
+import getComment from "../controllers/comment/getComment";
 import getPostById from "../controllers/post/getPostById";
 import getPostsByUserId from "../controllers/post/getPostsByUserId";
 import getPostFeed from "../controllers/post/getPostFeed";
@@ -18,7 +18,7 @@ import editComment from "../controllers/comment/editComment";
 import addCommentReaction from "../controllers/comment/addCommentReaction";
 import editCommentReaction from "../controllers/comment/editCommentReaction";
 import removeCommentReaction from "../controllers/comment/removeCommentReaction";
-import getCommentById from "../controllers/post/getCommentById";
+import getCommentById from "../controllers/comment/getCommentById";
 
 const postRouter = Router();
 

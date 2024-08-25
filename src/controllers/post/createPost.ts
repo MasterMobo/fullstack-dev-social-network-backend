@@ -44,8 +44,8 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
     }
 
     const newPost: IPost = {
-        userID: userId,
-        groupID: groupId,
+        user: userId,
+        group: groupId,
         text: text,
         visibility: visibility,
         images: imageUrls,

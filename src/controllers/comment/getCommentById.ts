@@ -10,7 +10,7 @@ const getCommentById = async (
     const { commentId } = req.params;
 
     // Check if comment exists
-    const comment = await Comment.findById(commentId).exec();
+    const comment = await Comment.findById(commentId).populate("user").exec();
     if (!comment) {
         return next(new NotFoundError("Comment not found"));
     }
