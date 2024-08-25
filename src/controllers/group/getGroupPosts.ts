@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Post } from "../../models/post";
 import { Group } from "../../models/group";
 import { NotFoundError, UnauthorizedError } from "../../errors";
+import getCurrentPostReaction from "../post/helpers/getCurrentPostReaction";
 
 const getGroupPosts = async (
     req: Request,
@@ -37,7 +38,13 @@ const getGroupPosts = async (
         .populate("group")
         .exec();
 
-    return res.json({ posts });
+    const currentUserId = req.signedCookies["user"]._id;
+
+    const responsePosts = posts.map((post) => {
+        const currentReaction = getCurrentPostReaction(currentUserId, post);
+        return { ...post.toObject(), currentReaction };
+    });
+    return res.json({ posts: responsePosts });
 };
 
 export default getGroupPosts;

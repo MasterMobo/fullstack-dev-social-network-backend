@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import { Post } from "../../models/post";
+import { IPost, Post } from "../../models/post";
 import { BadRequestError } from "../../errors";
 import { Types } from "mongoose";
 import { User } from "../../models/user";
 import { Friendship } from "../../models/friendship";
+import getCurrentPostReaction from "./helpers/getCurrentPostReaction";
 
 const getPostsByUserId = async (
     req: Request,
@@ -19,7 +20,12 @@ const getPostsByUserId = async (
             .populate("user")
             .populate("group")
             .exec();
-        return res.json({ posts });
+
+        const responsePosts = posts.map((post) => {
+            const currentReaction = getCurrentPostReaction(currentUserId, post);
+            return { ...post.toObject(), currentReaction };
+        });
+        return res.json({ posts: responsePosts });
     }
 
     // Check if they are friends
@@ -37,15 +43,27 @@ const getPostsByUserId = async (
             .populate("user")
             .populate("group")
             .exec();
-        return res.json({ posts });
+
+        const responsePosts = posts.map((post) => {
+            const currentReaction = getCurrentPostReaction(currentUserId, post);
+            return { ...post.toObject(), currentReaction };
+        });
+
+        return res.json({ posts: responsePosts });
     }
 
     // Otherwise, return only public posts
-    const publicPosts = await Post.find({ user: userID, visibility: "public" })
+    const posts = await Post.find({ user: userID, visibility: "public" })
         .populate("user")
         .populate("group")
         .exec();
-    return res.json({ posts: publicPosts });
+
+    const responsePosts = posts.map((post) => {
+        const currentReaction = getCurrentPostReaction(currentUserId, post);
+        return { ...post.toObject(), currentReaction };
+    });
+
+    return res.json({ posts: responsePosts });
 };
 
 export default getPostsByUserId;

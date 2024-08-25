@@ -1,6 +1,5 @@
 import { Schema, model, Types } from "mongoose";
 import { IReaction } from "./reaction";
-import { IComment } from "./comment";
 import { IEditHistory } from "./editHistory";
 
 interface IPost {
