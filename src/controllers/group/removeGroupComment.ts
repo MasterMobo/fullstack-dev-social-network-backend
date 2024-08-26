@@ -19,7 +19,7 @@ const removeGroupComment = async (
     // Check if post exists
     const post = Group.findOne({
         _id: postId,
-        groupID: groupId,
+        group: groupId,
     }).exec();
     if (!post) {
         return next(new NotFoundError("Post not found"));

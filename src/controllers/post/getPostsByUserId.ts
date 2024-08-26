@@ -4,7 +4,7 @@ import { BadRequestError } from "../../errors";
 import { Types } from "mongoose";
 import { User } from "../../models/user";
 import { Friendship } from "../../models/friendship";
-import getCurrentPostReaction from "./helpers/getCurrentPostReaction";
+import getMyPosts from "./getMyPosts";
 
 const getPostsByUserId = async (
     req: Request,
@@ -16,16 +16,7 @@ const getPostsByUserId = async (
 
     // If the userID is the current user, return all posts
     if (userID === currentUserId.toString()) {
-        const posts = await Post.find({ user: userID })
-            .populate("user")
-            .populate("group")
-            .exec();
-
-        const responsePosts = posts.map((post) => {
-            const currentReaction = getCurrentPostReaction(currentUserId, post);
-            return { ...post.toObject(), currentReaction };
-        });
-        return res.json({ posts: responsePosts });
+        return getMyPosts(req, res, next);
     }
 
     // Check if they are friends
@@ -44,12 +35,9 @@ const getPostsByUserId = async (
             .populate("group")
             .exec();
 
-        const responsePosts = posts.map((post) => {
-            const currentReaction = getCurrentPostReaction(currentUserId, post);
-            return { ...post.toObject(), currentReaction };
-        });
-
-        return res.json({ posts: responsePosts });
+        // Pass the posts to the next middleware
+        res.locals.posts = posts.map((post) => post.toObject());
+        return next();
     }
 
     // Otherwise, return only public posts
@@ -58,12 +46,9 @@ const getPostsByUserId = async (
         .populate("group")
         .exec();
 
-    const responsePosts = posts.map((post) => {
-        const currentReaction = getCurrentPostReaction(currentUserId, post);
-        return { ...post.toObject(), currentReaction };
-    });
-
-    return res.json({ posts: responsePosts });
+    // Pass the posts to the next middleware
+    res.locals.posts = posts.map((post) => post.toObject());
+    return next();
 };
 
 export default getPostsByUserId;

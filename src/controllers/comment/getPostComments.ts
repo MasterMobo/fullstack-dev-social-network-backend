@@ -3,7 +3,11 @@ import { BadRequestError, NotFoundError } from "../../errors";
 import { Comment } from "../../models/comment";
 import { Types } from "mongoose";
 
-const getComment = async (req: Request, res: Response, next: NextFunction) => {
+const getPostComments = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     const { postId } = req.params;
 
     // Validate the postId
@@ -20,8 +24,9 @@ const getComment = async (req: Request, res: Response, next: NextFunction) => {
         return next(new NotFoundError("Comments not found"));
     }
 
-    // Respond with the comments
-    return res.json({ comments });
+    // Pass the comments to the next middleware
+    res.locals.comments = comments.map((comment) => comment.toObject());
+    next();
 };
 
-export default getComment;
+export default getPostComments;

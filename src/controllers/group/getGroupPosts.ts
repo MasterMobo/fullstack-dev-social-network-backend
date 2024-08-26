@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { Post } from "../../models/post";
 import { Group } from "../../models/group";
 import { NotFoundError, UnauthorizedError } from "../../errors";
-import getCurrentPostReaction from "../post/helpers/getCurrentPostReaction";
 
 const getGroupPosts = async (
     req: Request,
@@ -38,13 +37,9 @@ const getGroupPosts = async (
         .populate("group")
         .exec();
 
-    const currentUserId = req.signedCookies["user"]._id;
-
-    const responsePosts = posts.map((post) => {
-        const currentReaction = getCurrentPostReaction(currentUserId, post);
-        return { ...post.toObject(), currentReaction };
-    });
-    return res.json({ posts: responsePosts });
+    // Pass the posts to the next middleware
+    res.locals.posts = posts.map((post) => post.toObject());
+    return next();
 };
 
 export default getGroupPosts;

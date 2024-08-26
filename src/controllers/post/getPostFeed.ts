@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { Post } from "../../models/post";
 import { Friendship } from "../../models/friendship";
 import { BadRequestError, NotFoundError } from "../../errors";
-import getCurrentPostReaction from "./helpers/getCurrentPostReaction";
 
 const getPostFeed = async (req: Request, res: Response, next: NextFunction) => {
     const { _id: currentUserId } = req.signedCookies["user"];
@@ -31,13 +30,9 @@ const getPostFeed = async (req: Request, res: Response, next: NextFunction) => {
         .sort({ postedAt: -1 }) // Sort by date, newest first
         .exec();
 
-    // Add the current user's reaction to each post
-    const responsePosts = posts.map((post) => {
-        const currentReaction = getCurrentPostReaction(currentUserId, post);
-        return { ...post.toObject(), currentReaction };
-    });
-
-    res.json({ posts: responsePosts });
+    // Pass the posts to the next middleware
+    res.locals.posts = posts.map((post) => post.toObject());
+    return next();
 };
 
 export default getPostFeed;

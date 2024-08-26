@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { Post } from "../../models/post";
 import { BadRequestError } from "../../errors";
-import getCurrentPostReaction from "./helpers/getCurrentPostReaction";
 
 const getMyPosts = async (req: Request, res: Response, next: NextFunction) => {
     const { _id: currentUserId } = req.signedCookies["user"];
@@ -15,12 +14,9 @@ const getMyPosts = async (req: Request, res: Response, next: NextFunction) => {
         return next(new BadRequestError("Post not found."));
     }
 
-    const responsePosts = posts.map((post) => {
-        const currentReaction = getCurrentPostReaction(currentUserId, post);
-        return { ...post.toObject(), currentReaction };
-    });
-
-    return res.status(200).json({ posts: responsePosts });
+    // Pass the posts to the next middleware
+    res.locals.posts = posts.map((post) => post.toObject());
+    next();
 };
 
 export default getMyPosts;

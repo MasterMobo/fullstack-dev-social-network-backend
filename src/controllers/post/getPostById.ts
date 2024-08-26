@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Post } from "../../models/post";
 import { BadRequestError } from "../../errors";
-import getCurrentPostReaction from "./helpers/getCurrentPostReaction";
+import getCurrentReaction from "../../middlewares/reactions/getCurrentReaction";
 
 const getPostById = async (req: Request, res: Response, next: NextFunction) => {
     const { postID } = req.params;
@@ -15,7 +15,8 @@ const getPostById = async (req: Request, res: Response, next: NextFunction) => {
         return next(new BadRequestError("Post not found."));
     }
 
-    let currentReaction = getCurrentPostReaction(
+    // Get the current reaction of the user
+    let currentReaction = getCurrentReaction(
         req.signedCookies["user"]._id,
         post
     );

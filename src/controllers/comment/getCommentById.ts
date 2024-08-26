@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Comment } from "../../models/comment";
 import { NotFoundError } from "../../errors";
+import getCurrentReaction from "../../middlewares/reactions/getCurrentReaction";
 
 const getCommentById = async (
     req: Request,
@@ -15,7 +16,14 @@ const getCommentById = async (
         return next(new NotFoundError("Comment not found"));
     }
 
-    return res.json({ comment });
+    // Get the current reaction of the user
+    const currentReaction = getCurrentReaction(
+        req.signedCookies["user"]._id,
+        comment
+    );
+    const resComment = { ...comment.toObject(), currentReaction };
+
+    return res.json({ comment: resComment });
 };
 
 export default getCommentById;
