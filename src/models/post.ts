@@ -1,4 +1,4 @@
-import { Schema, model, Types } from "mongoose";
+import { Schema, model, Types, Query, UpdateQuery } from "mongoose";
 import { IReaction } from "./reaction";
 import { IEditHistory } from "./editHistory";
 
@@ -28,6 +28,30 @@ const PostSchema = new Schema<IPost>({
     postedAt: { type: Date, default: Date.now },
 });
 
+// Remove empty reactions before saving
+PostSchema.pre("save", function (next) {
+    if (this.isModified("reactions")) {
+        this.reactions = this.reactions.filter(
+            (reaction: IReaction) => reaction.users.length > 0
+        );
+    }
+    next();
+});
+
+// Remove empty reactions before updating
+PostSchema.pre(
+    /^(updateOne|findOneAndUpdate)/,
+    function (this: Query<any, any>, next) {
+        const update = this.getUpdate() as UpdateQuery<IPost>;
+        if (update && update.reactions) {
+            update.reactions = update.reactions.filter(
+                (reaction: IReaction) => reaction.users.length > 0
+            );
+            this.setUpdate(update);
+        }
+        next();
+    }
+);
 const Post = model<IPost>("Post", PostSchema);
 
 export { Post, IPost };
