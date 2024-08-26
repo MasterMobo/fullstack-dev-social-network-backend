@@ -7,22 +7,12 @@ import editPost from "../controllers/post/editPost";
 import addPostReaction from "../controllers/post/addPostReaction";
 import editPostReaction from "../controllers/post/editPostReaction";
 import removePostReaction from "../controllers/post/removePostReaction";
-import getPostComments from "../controllers/comment/getPostComments";
 import getPostById from "../controllers/post/getPostById";
 import getPostsByUserId from "../controllers/post/getPostsByUserId";
 import getPostFeed from "../controllers/post/getPostFeed";
 import getMyPosts from "../controllers/post/getMyPosts";
-
-import createComment from "../controllers/comment/createComment";
-import editComment from "../controllers/comment/editComment";
-import addCommentReaction from "../controllers/comment/addCommentReaction";
-import editCommentReaction from "../controllers/comment/editCommentReaction";
-import removeCommentReaction from "../controllers/comment/removeCommentReaction";
-import getCommentById from "../controllers/comment/getCommentById";
-import {
-    attachCurrentCommentReaction,
-    attachCurrentPostReaction,
-} from "../middlewares/reactions/attachCurrentReaction";
+import { attachCurrentPostReaction } from "../middlewares/reactions/attachCurrentReaction";
+import commentRouter from "./commentRoutes";
 
 const postRouter = Router();
 
@@ -41,7 +31,6 @@ postRouter.get(
     attachCurrentPostReaction
 );
 
-// Posts
 postRouter.post("/", manyFilesUpload("images"), asyncWrapper(createPost));
 
 postRouter.get("/:postID", asyncWrapper(getPostById));
@@ -54,32 +43,6 @@ postRouter.patch("/:postId/reaction", asyncWrapper(editPostReaction));
 
 postRouter.delete("/:postId/reaction", asyncWrapper(removePostReaction));
 
-// Comments
-postRouter.post("/:postId/comment", asyncWrapper(createComment));
-
-postRouter.get(
-    "/:postId/comment",
-    asyncWrapper(getPostComments),
-    attachCurrentCommentReaction
-);
-
-postRouter.get("/:postId/comment/:commentId", asyncWrapper(getCommentById));
-
-postRouter.patch("/:postId/comment/:commentId", asyncWrapper(editComment));
-
-postRouter.post(
-    "/:postId/comment/:commentId/reaction",
-    asyncWrapper(addCommentReaction)
-);
-
-postRouter.patch(
-    "/:postId/comment/:commentId/reaction",
-    asyncWrapper(editCommentReaction)
-);
-
-postRouter.delete(
-    "/:postId/comment/:commentId/reaction",
-    asyncWrapper(removeCommentReaction)
-);
+postRouter.use("/:postId/comment", commentRouter);
 
 export default postRouter;
