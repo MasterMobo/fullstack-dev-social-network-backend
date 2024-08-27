@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { User } from "../../models/user";
-import { NotFoundError } from "../../errors";
+import { BadRequestError, NotFoundError } from "../../errors";
 import { Group } from "../../models/group";
 import { MemberRequest } from "../../models/memberRequest";
 
@@ -22,6 +22,22 @@ const createMemberRequest = async (
   const group = await Group.findById(groupId).exec();
   if (!group) {
     return next(new NotFoundError("Group not found"));
+  }
+
+  // Check if user is already a member
+  const isMember = group.members.some(
+    (member) => member._id.toString() === userId
+  );
+  if (isMember) {
+    return next(new BadRequestError("User is already a member of the group"));
+  }
+
+  // Check if user has already sent the request to the group
+  const existingRequest = await MemberRequest.findOne({ userId, groupId });
+  if (existingRequest) {
+    return next(
+      new BadRequestError("A member request is already sent to this group")
+    );
   }
 
   const newMemberRequest = new MemberRequest({
