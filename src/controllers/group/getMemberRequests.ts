@@ -5,35 +5,37 @@ import { Group } from "../../models/group";
 import { MemberRequest } from "../../models/memberRequest";
 
 const getMemberRequests = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
-  // Check if group exists
-  const groupId = req.params;
+    // Check if group exists
+    const { groupId } = req.params;
 
-  const group = await Group.findById(groupId).exec();
-  if (!group) {
-    return next(new NotFoundError("Group not found!"));
-  }
+    const group = await Group.findById(groupId).exec();
+    if (!group) {
+        return next(new NotFoundError("Group not found!"));
+    }
 
-  // Check if current user is the admin of the group
-  const { _id: currentUserId } = req.signedCookies["user"];
-  const groupAdmin = group.admins.some(
-    (admin) => admin._id.toString() === currentUserId
-  );
+    // Check if current user is the admin of the group
+    const { _id: currentUserId } = req.signedCookies["user"];
+    const groupAdmin = group.admins.some((admin) =>
+        admin._id.equals(currentUserId)
+    );
 
-  if (!groupAdmin) {
-    return next(new UnauthorizedError("User is not authorized!"));
-  }
+    if (!groupAdmin) {
+        return next(new UnauthorizedError("User is not authorized!"));
+    }
 
-  const memberRequests = await MemberRequest.find({ groupId }).exec();
-  if (!memberRequests) {
-    return next(new NotFoundError("Member request not found"));
-  }
+    const memberRequests = await MemberRequest.find({ groupId })
+        .populate("user")
+        .exec();
+    if (!memberRequests) {
+        return next(new NotFoundError("Member request not found"));
+    }
 
-  // Respond with the member requests
-  return res.json({ requests: memberRequests });
+    // Respond with the member requests
+    return res.json({ requests: memberRequests });
 };
 
 export default getMemberRequests;

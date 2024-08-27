@@ -22,9 +22,9 @@ groupRouter.post("/:groupId/members", asyncWrapper(createMemberRequest));
 groupRouter.get("/:groupId/members/requests", asyncWrapper(getMemberRequests));
 
 // Accept/decline group member request
-groupRouter.get(
-  "/:groupId/members/requests/:requestId",
-  asyncWrapper(acceptMemberRequest)
+groupRouter.patch(
+    "/:groupId/members/requests/:requestId",
+    asyncWrapper(acceptMemberRequest)
 );
 
 export default groupRouter;
