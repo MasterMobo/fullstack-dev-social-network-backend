@@ -12,6 +12,7 @@ import { attachCurrentPostReaction } from "../middlewares/reactions/attachCurren
 import getMemberRequests from "../controllers/group/memberRequest/getMemberRequests";
 import acceptMemberRequest from "../controllers/group/memberRequest/acceptMemberRequest";
 import createMemberRequest from "../controllers/group/memberRequest/createMemberRequest";
+import queryGroups from "../controllers/group/queryGroups";
 
 const groupRouter = Router();
 
@@ -20,6 +21,8 @@ groupRouter.post(
     singleFileUpload("groupPicture"),
     asyncWrapper(createGroup)
 );
+
+groupRouter.get("/", asyncWrapper(queryGroups));
 
 groupRouter.get("/:userId/accepted", asyncWrapper(getUserAcceptedGroup));
 
