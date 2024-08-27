@@ -30,7 +30,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     res.cookie("user", publicUser, {
         signed: true,
-        maxAge: 60 * 60 * 1000,
+        maxAge: 1000 * 60 * 60 * 24 * 30, // One month
         httpOnly: true,
     }).json({
         message: "Login successfully",
