@@ -3,6 +3,8 @@ import { Post } from "../../models/post";
 import { BadRequestError, ConflictError, NotFoundError } from "../../errors";
 import { IReaction, allowedReactions } from "../../models/reaction";
 import { User } from "../../models/user";
+import removePostReaction from "./removePostReaction";
+import getCurrentReaction from "../../middlewares/reactions/getCurrentReaction";
 
 const addPostReaction = async (
     req: Request,
@@ -24,38 +26,45 @@ const addPostReaction = async (
         return next(new NotFoundError("Post not found"));
     }
 
+    // If reaction is empty, remove the reaction
+    if (reaction.length === 0) {
+        return removePostReaction(req, res, next);
+    }
+
     // Check if reaction is valid
     if (!allowedReactions.includes(reaction)) {
         return next(new BadRequestError("Invalid reaction"));
     }
 
-    // Check if user has already reacted to the post
-    for (const postReactions of post.reactions) {
-        if (postReactions.users.find((u) => u._id.equals(user._id))) {
-            return next(
-                new ConflictError("User has already reacted to this post")
-            );
-        }
-    }
+    let currentReaction = getCurrentReaction(user._id.toString(), post);
 
-    // If this no one has reacted to this post with this reaction
-    if (!post.reactions.find((r) => r.reaction === reaction)) {
-        const newReaction: IReaction = {
-            reaction: reaction,
-            users: [user],
-        };
-
-        post.reactions.push(newReaction);
-        await post.save();
-
+    // Check if user has already reacted with the same reaction, do nothing
+    if (reaction === currentReaction) {
         return res.json({ post });
     }
 
-    // If this reaction already exists
-    for (const postReactions of post.reactions) {
-        if (postReactions.reaction === reaction) {
-            postReactions.users.push(user);
-        }
+    // Remove user from the previous reaction
+    if (currentReaction) {
+        post.reactions = post.reactions.map((r: IReaction) => {
+            if (r.reaction === currentReaction) {
+                r.users = r.users.filter((u) => !u._id.equals(user._id));
+            }
+            return r;
+        });
+    }
+
+    const targetReaction = post.reactions.find(
+        (r: IReaction) => r.reaction === reaction
+    );
+    // If no one has reacted with the this reaction, create a new one
+    if (!targetReaction) {
+        post.reactions.push({
+            reaction,
+            users: [user],
+        });
+    } else {
+        // If someone has reacted with this reaction, add the user to the list
+        targetReaction.users.push(user);
     }
 
     const newReactions = post.reactions;
