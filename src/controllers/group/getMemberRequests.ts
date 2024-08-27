@@ -18,7 +18,7 @@ const getMemberRequests = async (
   }
 
   // Check if current user is the admin of the group
-  const { _id: currentUserId } = req.signedCookies["users"];
+  const { _id: currentUserId } = req.signedCookies["user"];
   const groupAdmin = group.admins.some(
     (admin) => admin._id.toString() === currentUserId
   );
