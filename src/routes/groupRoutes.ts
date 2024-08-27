@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { asyncWrapper } from "../middlewares";
-import createGroup from "../controllers/group/createGroup";
+import createGroup from "../controllers/group/groupCreationRequest/createGroup";
 import getUserAcceptedGroup from "../controllers/group/getUserAcceptedGroup";
 import deleteGroupMember from "../controllers/group/deleteGroupMember";
 import { singleFileUpload } from "../middlewares/fileUpload";
@@ -9,9 +9,9 @@ import getGroupPosts from "../controllers/group/getGroupPosts";
 import removeGroupPost from "../controllers/group/removeGroupPost";
 import removeGroupComment from "../controllers/group/removeGroupComment";
 import { attachCurrentPostReaction } from "../middlewares/reactions/attachCurrentReaction";
-import createMemberRequest from "../controllers/group/createMemberRequest";
-import getMemberRequests from "../controllers/group/getMemberRequests";
-import acceptMemberRequest from "../controllers/group/acceptMemberRequest";
+import getMemberRequests from "../controllers/group/memberRequest/getMemberRequests";
+import acceptMemberRequest from "../controllers/group/memberRequest/acceptMemberRequest";
+import createMemberRequest from "../controllers/group/memberRequest/createMemberRequest";
 
 const groupRouter = Router();
 

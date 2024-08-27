@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError, NotFoundError } from "../../errors";
-import { IUser, User } from "../../models/user";
-import { IGroup, Group } from "../../models/group";
-import uploadImage from "../upload/uploadImage";
+import { BadRequestError, NotFoundError } from "../../../errors";
+import { IUser, User } from "../../../models/user";
+import { IGroup, Group } from "../../../models/group";
+import uploadImage from "../../upload/uploadImage";
 
 const createGroup = async (req: Request, res: Response, next: NextFunction) => {
     const { name, userId, visibility } = req.body;

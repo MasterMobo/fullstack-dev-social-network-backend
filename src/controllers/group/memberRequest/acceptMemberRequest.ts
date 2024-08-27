@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { Admin, IUser, User } from "../../models/user";
+import { Admin, IUser, User } from "../../../models/user";
 import {
     BadRequestError,
     NotFoundError,
     UnauthorizedError,
-} from "../../errors";
-import { Group } from "../../models/group";
-import { MemberRequest } from "../../models/memberRequest";
+} from "../../../errors";
+import { Group } from "../../../models/group";
+import { MemberRequest } from "../../../models/memberRequest";
 
 const acceptMemberRequest = async (
     req: Request,

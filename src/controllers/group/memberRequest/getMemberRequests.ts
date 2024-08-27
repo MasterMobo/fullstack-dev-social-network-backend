@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { Admin, IUser } from "../../models/user";
-import { NotFoundError, UnauthorizedError } from "../../errors";
-import { Group } from "../../models/group";
-import { MemberRequest } from "../../models/memberRequest";
+import { Admin, IUser } from "../../../models/user";
+import { NotFoundError, UnauthorizedError } from "../../../errors";
+import { Group } from "../../../models/group";
+import { MemberRequest } from "../../../models/memberRequest";
 
 const getMemberRequests = async (
     req: Request,
