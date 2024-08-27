@@ -9,17 +9,22 @@ const getMemberRequests = async (
   res: Response,
   next: NextFunction
 ) => {
-  // Check if current user is admin
-  const admin: IUser = req.signedCookies["users"];
-  if (!(await Admin.findById(admin._id).exec())) {
-    return next(new UnauthorizedError("User is not authorized!"));
-  }
-
+  // Check if group exists
   const groupId = req.body;
 
   const group = await Group.findById(groupId).exec();
   if (!group) {
     return next(new NotFoundError("Group not found!"));
+  }
+
+  // Check if current user is the admin of the group
+  const { _id: currentUserId } = req.signedCookies["users"];
+  const groupAdmin = group.admins.some(
+    (admin) => admin._id.toString() === currentUserId
+  );
+
+  if (!groupAdmin) {
+    return next(new UnauthorizedError("User is not authorized!"));
   }
 
   const memberRequests = await MemberRequest.find({ groupId }).exec();
