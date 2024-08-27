@@ -10,7 +10,7 @@ const getMemberRequests = async (
   next: NextFunction
 ) => {
   // Check if group exists
-  const groupId = req.body;
+  const groupId = req.params;
 
   const group = await Group.findById(groupId).exec();
   if (!group) {
