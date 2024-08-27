@@ -27,7 +27,10 @@ const getMemberRequests = async (
         return next(new UnauthorizedError("User is not authorized!"));
     }
 
-    const memberRequests = await MemberRequest.find({ groupId })
+    const memberRequests = await MemberRequest.find({
+        groupId,
+        status: "pending",
+    })
         .populate("user")
         .exec();
     if (!memberRequests) {
