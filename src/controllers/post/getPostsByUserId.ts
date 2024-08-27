@@ -33,6 +33,7 @@ const getPostsByUserId = async (
         const posts = await Post.find({ user: userID })
             .populate("user")
             .populate("group")
+            .sort({ postedAt: -1 })
             .exec();
 
         // Pass the posts to the next middleware
@@ -44,6 +45,7 @@ const getPostsByUserId = async (
     const posts = await Post.find({ user: userID, visibility: "public" })
         .populate("user")
         .populate("group")
+        .sort({ postedAt: -1 })
         .exec();
 
     // Pass the posts to the next middleware

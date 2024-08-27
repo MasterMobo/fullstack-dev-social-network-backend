@@ -8,6 +8,7 @@ const getMyPosts = async (req: Request, res: Response, next: NextFunction) => {
     const posts = await Post.find({ user: currentUserId })
         .populate("user")
         .populate("group")
+        .sort({ postedAt: -1 })
         .exec();
 
     if (!posts) {
