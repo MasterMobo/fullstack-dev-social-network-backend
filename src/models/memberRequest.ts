@@ -3,7 +3,7 @@ import { Schema, Types, model } from "mongoose";
 interface IMemberRequest {
   userId: Types.ObjectId;
   groupId: Types.ObjectId;
-  status: "pending" | "accepted" | "decline";
+  status: "pending" | "accepted" | "declined";
   createdAt: Date;
 }
 
@@ -12,7 +12,7 @@ const MemberRequestSchema = new Schema<IMemberRequest>({
   groupId: { type: Schema.Types.ObjectId, ref: "Group", required: true },
   status: {
     type: String,
-    enum: ["pending", "accepted", "decline"],
+    enum: ["pending", "accepted", "declined"],
     default: "pending",
   },
   createdAt: { type: Date, default: Date.now },
