@@ -5,6 +5,7 @@ import { IReaction, allowedReactions } from "../../models/reaction";
 import { User } from "../../models/user";
 import removePostReaction from "./removePostReaction";
 import getCurrentReaction from "../../middlewares/reactions/getCurrentReaction";
+import NotificationManager from "../notification/models/notificationManager";
 
 const addPostReaction = async (
     req: Request,
@@ -56,6 +57,7 @@ const addPostReaction = async (
     const targetReaction = post.reactions.find(
         (r: IReaction) => r.reaction === reaction
     );
+
     // If no one has reacted with the this reaction, create a new one
     if (!targetReaction) {
         post.reactions.push({
@@ -74,6 +76,16 @@ const addPostReaction = async (
         { reactions: newReactions },
         { new: true }
     ).exec();
+
+    if (!post.user.equals(user._id)) {
+        // If the reaction is not from the post owner
+        // Send notification to the post owner
+        await NotificationManager.getInstance().sendReactionReceivedNotification(
+            post.user,
+            post._id,
+            user._id
+        );
+    }
 
     return res.json({ post: updatedPost });
 };

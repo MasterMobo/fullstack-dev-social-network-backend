@@ -3,6 +3,8 @@ import { User } from "../../../models/user";
 import { BadRequestError, NotFoundError } from "../../../errors";
 import { Group } from "../../../models/group";
 import { MemberRequest } from "../../../models/memberRequest";
+import NotificationManager from "../../notification/models/notificationManager";
+import { Types } from "mongoose";
 
 const createMemberRequest = async (
     req: Request,
@@ -53,6 +55,12 @@ const createMemberRequest = async (
         status: "pending",
         createdAt: new Date(),
     });
+
+    await NotificationManager.getInstance().sendGroupMemberRequestReceivedNotification(
+        group.admins[0]._id,
+        userId,
+        new Types.ObjectId(groupId)
+    );
 
     return res.json({ memberRequest });
 };

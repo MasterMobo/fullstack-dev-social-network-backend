@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Friendship } from "../../models/friendship";
-import { BadRequestError } from "../../errors";
+import { BadRequestError, ConflictError } from "../../errors";
+import NotificationManager from "../notification/models/notificationManager";
 
 const acceptFriendRequest = async (
     req: Request,
@@ -22,9 +23,19 @@ const acceptFriendRequest = async (
         return next(new BadRequestError("Invalid sender or receiver"));
     }
 
+    if (friendship.status === "accepted") {
+        return next(new ConflictError("Friendship already accepted"));
+    }
+
     friendship.status = "accepted";
 
     await friendship!.save();
+
+    // Send notification to the sender
+    await NotificationManager.getInstance().sendFriendRequestAcceptedNotification(
+        senderID,
+        receiverID
+    );
 
     return res.json({ request: friendship });
 };

@@ -16,6 +16,7 @@ import cors from "cors";
 import postRouter from "./routes/postRoutes";
 import { authMiddleware } from "./middlewares";
 import notFoundHandler from "./middlewares/notFoundHandler";
+import notificationRouter from "./routes/notificationRoutes";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use("/friends", authMiddleware, friendRouter);
 app.use("/posts", authMiddleware, postRouter);
 app.use("/admin", authMiddleware, adminRouter);
 app.use("/groups", authMiddleware, groupRouter);
+app.use("/notifications", authMiddleware, notificationRouter);
 app.use("/images", imageRouter);
 app.use("*", notFoundHandler);
 
