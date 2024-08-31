@@ -31,9 +31,9 @@ adminRouter.patch("/users/suspend/:userId", asyncWrapper(suspendUser));
 adminRouter.patch("/users/resume/:userId", asyncWrapper(resumeUser));
 
 // Remove comment
-adminRouter.delete("comments/:commentId", asyncWrapper(removeComment));
+adminRouter.delete("/comments/:commentId", asyncWrapper(removeComment));
 
 // Remove post
-adminRouter.delete("posts/:postId", asyncWrapper(removePost));
+adminRouter.delete("/posts/:postId", asyncWrapper(removePost));
 
 export default adminRouter;
