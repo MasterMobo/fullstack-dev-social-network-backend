@@ -36,6 +36,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         email: email,
         password: passwordHashed,
         profilePic,
+        status: "active",
     });
 
     const publicUser = await User.findOne(newUser._id).exec();
