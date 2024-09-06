@@ -10,22 +10,14 @@ import {
 
 const friendRouter = Router();
 
-friendRouter.get("/:userId", authMiddleware, getFriends);
+friendRouter.get("/:userId", asyncWrapper(getFriends));
 
-friendRouter.get("/request/:userId", authMiddleware, getFriendships);
+friendRouter.get("/request/:userId", asyncWrapper(getFriendships));
 
-friendRouter.post(
-    "/request",
-    authMiddleware,
-    asyncWrapper(createFriendRequest)
-);
+friendRouter.post("/request", asyncWrapper(createFriendRequest));
 
-friendRouter.patch(
-    "/request",
-    authMiddleware,
-    asyncWrapper(acceptFriendRequest)
-);
+friendRouter.patch("/request", asyncWrapper(acceptFriendRequest));
 
-friendRouter.delete("/request", authMiddleware, asyncWrapper(deleteFriendship));
+friendRouter.delete("/request", asyncWrapper(deleteFriendship));
 
 export default friendRouter;

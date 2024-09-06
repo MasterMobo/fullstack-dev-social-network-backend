@@ -1,8 +1,8 @@
-import e, { NextFunction, Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { User } from "../../models/user";
 import bcript from "bcryptjs";
 import { ConflictError, UnauthorizedError } from "../../errors";
-import uploadImage from "./upload";
+import uploadImage from "../upload/uploadImage";
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
     const { fullName, email, password } = req.body;
@@ -36,6 +36,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
         email: email,
         password: passwordHashed,
         profilePic,
+        status: "active",
     });
 
     const publicUser = await User.findOne(newUser._id).exec();

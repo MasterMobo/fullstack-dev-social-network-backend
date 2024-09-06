@@ -3,6 +3,8 @@ import { Friendship, IFriendship } from "../../models/friendship";
 import { IUser, User } from "../../models/user";
 import { BadRequestError, NotFoundError } from "../../errors";
 import { Types } from "mongoose";
+import NotificationManager from "../notification/models/notificationManager";
+import { FriendRequestReceivedNotificationFactory } from "../notification/models/friendRequestNotification";
 
 const createFriendRequest = async (
     req: Request,
@@ -19,7 +21,9 @@ const createFriendRequest = async (
     }
 
     if (senderID === receiverID) {
-        return next(new BadRequestError("Sender and Receiver can't be the same!"));
+        return next(
+            new BadRequestError("Sender and Receiver can't be the same!")
+        );
     }
 
     const existingFriendship = await Friendship.findOne({
@@ -40,6 +44,12 @@ const createFriendRequest = async (
     };
 
     await new Friendship(newFriendship).save();
+
+    // Send notification to the receiver
+    await NotificationManager.getInstance().sendFriendRequestReceivedNotification(
+        senderID,
+        receiverID
+    );
 
     return res.json({ request: newFriendship });
 };

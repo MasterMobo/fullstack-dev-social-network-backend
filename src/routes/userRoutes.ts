@@ -4,6 +4,7 @@ import { asyncWrapper, authMiddleware } from "../middlewares";
 
 const userRouter = Router();
 
-userRouter.get("/", authMiddleware, asyncWrapper(getMe));
+userRouter.get("/", asyncWrapper(getMe));
+
 
 export default userRouter;
